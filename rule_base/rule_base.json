@@ -264,7 +264,7 @@
     "id": "R24",
     "risiko": "Sedang",
     "conditions": {
-      "status_keuangan_bermasalah": "Tidak Ada",
+      "status_keuangan_bermasalah": "Tidak",
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 2, "max": 2 },
@@ -404,15 +404,13 @@
   },
   {
     "id": "R35",
-    "risiko": "Sedang",
+    "risiko": "Rendah",
     "conditions": {
       "status_keuangan_bermasalah": "Tidak",
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
-      "ipk": { "min": null, "max": 1.99 },
-      "jmlh_matkul_wajib": { "min": null, "max": 32 },
-      "total_matkul": { "min": null, "max": 49 }
+      "semester": { "min": null, "max": 5 }
     }
   },
   {
@@ -423,35 +421,38 @@
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": null, "max": 1.99 },
       "jmlh_matkul_wajib": { "min": null, "max": 32 },
-      "total_matkul": { "min": 50, "max": 51 }
+      "total_matkul": { "min": null, "max": 49 }
     }
   },
   {
     "id": "R37",
-    "risiko": "Rendah",
-    "conditions": {
-      "status_keuangan_bermasalah": "Tidak",
-      "sanksi_akademik": "Tidak Ada",
-      "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
-      "jumlah_sp": { "min": 0, "max": 1 },
-      "ipk": { "min": null, "max": 1.99 },
-      "jmlh_matkul_wajib": { "min": null, "max": 32 },
-      "total_matkul": { "min": 52, "max": null }
-    }
-  },
-  {
-    "id": "R38",
     "risiko": "Sedang",
     "conditions": {
       "status_keuangan_bermasalah": "Tidak",
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": null, "max": 1.99 },
-      "jmlh_matkul_wajib": { "min": 33, "max": 34 },
-      "total_matkul": { "min": null, "max": 49 }
+      "jmlh_matkul_wajib": { "min": null, "max": 32 },
+      "total_matkul": { "min": 50, "max": 51 }
+    }
+  },
+  {
+    "id": "R38",
+    "risiko": "Rendah",
+    "conditions": {
+      "status_keuangan_bermasalah": "Tidak",
+      "sanksi_akademik": "Tidak Ada",
+      "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
+      "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
+      "ipk": { "min": null, "max": 1.99 },
+      "jmlh_matkul_wajib": { "min": null, "max": 32 },
+      "total_matkul": { "min": 52, "max": null }
     }
   },
   {
@@ -462,48 +463,52 @@
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": null, "max": 1.99 },
       "jmlh_matkul_wajib": { "min": 33, "max": 34 },
-      "total_matkul": { "min": 50, "max": 51 }
+      "total_matkul": { "min": null, "max": 49 }
     }
   },
   {
     "id": "R40",
-    "risiko": "Rendah",
-    "conditions": {
-      "status_keuangan_bermasalah": "Tidak",
-      "sanksi_akademik": "Tidak Ada",
-      "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
-      "jumlah_sp": { "min": 0, "max": 1 },
-      "ipk": { "min": null, "max": 1.99 },
-      "jmlh_matkul_wajib": { "min": 33, "max": 34 },
-      "total_matkul": { "min": 52, "max": null }
-    }
-  },
-  {
-    "id": "R41",
     "risiko": "Sedang",
     "conditions": {
       "status_keuangan_bermasalah": "Tidak",
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": null, "max": 1.99 },
-      "jmlh_matkul_wajib": { "min": 35, "max": null },
-      "total_matkul": { "min": null, "max": 49 }
+      "jmlh_matkul_wajib": { "min": 33, "max": 34 },
+      "total_matkul": { "min": 50, "max": 51 }
     }
   },
   {
-    "id": "R42",
+    "id": "R41",
     "risiko": "Rendah",
     "conditions": {
       "status_keuangan_bermasalah": "Tidak",
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
+      "ipk": { "min": null, "max": 1.99 },
+      "jmlh_matkul_wajib": { "min": 33, "max": 34 },
+      "total_matkul": { "min": 52, "max": null }
+    }
+  },
+  {
+    "id": "R42",
+    "risiko": "Sedang",
+    "conditions": {
+      "status_keuangan_bermasalah": "Tidak",
+      "sanksi_akademik": "Tidak Ada",
+      "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
+      "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": null, "max": 1.99 },
       "jmlh_matkul_wajib": { "min": 35, "max": null },
-      "total_matkul": { "min": 50, "max": 51 }
+      "total_matkul": { "min": null, "max": 49 }
     }
   },
   {
@@ -514,22 +519,24 @@
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": null, "max": 1.99 },
       "jmlh_matkul_wajib": { "min": 35, "max": null },
-      "total_matkul": { "min": 52, "max": null }
+      "total_matkul": { "min": 50, "max": 51 }
     }
   },
   {
     "id": "R44",
-    "risiko": "Sedang",
+    "risiko": "Rendah",
     "conditions": {
       "status_keuangan_bermasalah": "Tidak",
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
-      "ipk": { "min": 2.00, "max": null },
-      "jmlh_matkul_wajib": { "min": null, "max": 32 },
-      "total_matkul": { "min": null, "max": 49 }
+      "semester": { "min": 6, "max": null },
+      "ipk": { "min": null, "max": 1.99 },
+      "jmlh_matkul_wajib": { "min": 35, "max": null },
+      "total_matkul": { "min": 52, "max": null }
     }
   },
   {
@@ -540,48 +547,52 @@
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": 2.00, "max": null },
       "jmlh_matkul_wajib": { "min": null, "max": 32 },
-      "total_matkul": { "min": 50, "max": 51 }
+      "total_matkul": { "min": null, "max": 49 }
     }
   },
   {
     "id": "R46",
-    "risiko": "Rendah",
-    "conditions": {
-      "status_keuangan_bermasalah": "Tidak",
-      "sanksi_akademik": "Tidak Ada",
-      "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
-      "jumlah_sp": { "min": 0, "max": 1 },
-      "ipk": { "min": 2.00, "max": null },
-      "jmlh_matkul_wajib": { "min": null, "max": 32 },
-      "total_matkul": { "min": 52, "max": null }
-    }
-  },
-  {
-    "id": "R47",
     "risiko": "Sedang",
     "conditions": {
       "status_keuangan_bermasalah": "Tidak",
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": 2.00, "max": null },
-      "jmlh_matkul_wajib": { "min": 33, "max": 34 },
-      "total_matkul": { "min": null, "max": 49 }
+      "jmlh_matkul_wajib": { "min": null, "max": 32 },
+      "total_matkul": { "min": 50, "max": 51 }
     }
   },
   {
-    "id": "R48",
+    "id": "R47",
     "risiko": "Rendah",
     "conditions": {
       "status_keuangan_bermasalah": "Tidak",
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
+      "ipk": { "min": 2.00, "max": null },
+      "jmlh_matkul_wajib": { "min": null, "max": 32 },
+      "total_matkul": { "min": 52, "max": null }
+    }
+  },
+  {
+    "id": "R48",
+    "risiko": "Sedang",
+    "conditions": {
+      "status_keuangan_bermasalah": "Tidak",
+      "sanksi_akademik": "Tidak Ada",
+      "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
+      "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": 2.00, "max": null },
       "jmlh_matkul_wajib": { "min": 33, "max": 34 },
-      "total_matkul": { "min": 50, "max": 51 }
+      "total_matkul": { "min": null, "max": 49 }
     }
   },
   {
@@ -592,9 +603,10 @@
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": 2.00, "max": null },
       "jmlh_matkul_wajib": { "min": 33, "max": 34 },
-      "total_matkul": { "min": 52, "max": null }
+      "total_matkul": { "min": 50, "max": 51 }
     }
   },
   {
@@ -605,6 +617,21 @@
       "sanksi_akademik": "Tidak Ada",
       "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
       "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
+      "ipk": { "min": 2.00, "max": null },
+      "jmlh_matkul_wajib": { "min": 33, "max": 34 },
+      "total_matkul": { "min": 52, "max": null }
+    }
+  },
+  {
+    "id": "R51",
+    "risiko": "Rendah",
+    "conditions": {
+      "status_keuangan_bermasalah": "Tidak",
+      "sanksi_akademik": "Tidak Ada",
+      "semester_tidak_aktif_berturut": { "min": 0, "max": 1 },
+      "jumlah_sp": { "min": 0, "max": 1 },
+      "semester": { "min": 6, "max": null },
       "ipk": { "min": 2.00, "max": null },
       "jmlh_matkul_wajib": { "min": 35, "max": null }
     }
