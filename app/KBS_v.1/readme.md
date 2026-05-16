@@ -5,6 +5,7 @@
 - Paulus Ungirwalu - 71231017
 
 ## Cara Penggunaan
+- Pastikan `rule_base.json` dan `app.py` berada di 1 folder yang sama
 - Buka Terminal di folder itu dan jalankan `python app.py`
 
 ## Metode
