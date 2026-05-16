@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>KBS — Risiko Gagal Studi Mahasiswa</title>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <style>
+        :root {
+            --bg: #0d0f14;
+            --surface: #161920;
+            --border: #4b5061;
+            --text: #e8eaf0;
+            --muted: #959cb3;
+            --accent: #4fffb0;
+            --accent-dim: #1a3d2e;
+            --warn: #ffb347;
+            --danger: #ff4f6a;
+            --safe: #4fffb0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+            linear-gradient(rgba(79,255,176,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(79,255,176,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header { margin-bottom: 48px; animation: fadeDown 0.6s ease both; }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            padding: 5px 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .header-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
+        h1 em { font-style: italic; color: var(--accent); }
+
+        .subtitle { color: var(--muted); font-size: 0.95rem; font-weight: 300; line-height: 1.6; }
+
+        #loadingOverlay {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 60px 24px;
+            color: var(--muted);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .spinner {
+            width: 32px; height: 32px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        #errorOverlay {
+            display: none;
+            background: rgba(255,79,106,0.06);
+            border: 1px solid var(--danger);
+            border-radius: 12px;
+            padding: 28px 32px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--danger);
+            line-height: 1.7;
+        }
+
+        #errorOverlay strong { display: block; margin-bottom: 8px; font-size: 0.95rem; }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group.full { grid-column: 1 / -1; }
+
+        label { font-size: 0.82rem; font-weight: 500; color: var(--muted); letter-spacing: 0.02em; }
+        label span.hint { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--border); display: block; margin-top: 2px; }
+
+        input[type="number"], select {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            padding: 10px 14px;
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79,255,176,0.08);
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7080' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+
+        .radio-group { display: flex; gap: 10px; }
+        .radio-btn { flex: 1; position: relative; }
+        .radio-btn input { position: absolute; opacity: 0; pointer-events: none; }
+        .radio-btn label {
+            display: flex; align-items: center; justify-content: center;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            cursor: pointer;
+            font-size: 0.88rem;
+            color: var(--muted);
+            transition: all 0.2s;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        .radio-btn input:checked + label { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .radio-btn label:hover { border-color: var(--muted); }
+
+        .error-msg { color: var(--danger); font-size: 0.78rem; font-family: 'IBM Plex Mono', monospace; margin-top: 2px; display: none; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px 24px;
+            background: var(--accent);
+            color: #0d0f14;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+        .btn-submit:active { transform: translateY(0); }
+
+        .result { display: none; border-radius: 12px; padding: 32px; border: 1px solid; animation: fadeUp 0.5s ease both; }
+        .result.tinggi { background: rgba(255,79,106,0.05);  border-color: var(--danger); }
+        .result.sedang  { background: rgba(255,179,71,0.05);  border-color: var(--warn); }
+        .result.rendah  { background: rgba(79,255,176,0.05);  border-color: var(--safe); }
+        .result.tidak   { background: rgba(107,112,128,0.05); border-color: var(--muted); }
+
+        .result-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 24px; }
+        .result-icon { font-size: 2.8rem; line-height: 1; flex-shrink: 0; }
+
+        .result-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .tinggi .result-label { color: var(--danger); }
+        .sedang .result-label { color: var(--warn); }
+        .rendah .result-label { color: var(--safe); }
+        .tidak  .result-label { color: var(--muted); }
+
+        .result-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; line-height: 1.1; }
+        .tinggi .result-title { color: var(--danger); }
+        .sedang .result-title { color: var(--warn); }
+        .rendah .result-title { color: var(--safe); }
+        .tidak  .result-title { color: var(--muted); }
+
+        .result-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; }
+
+        .rule-fired {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rule-id {
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            background: var(--border);
+            color: var(--text);
+            flex-shrink: 0;
+        }
+
+        .derived-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+        .derived-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; text-align: center; }
+        .derived-val { font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+        .derived-key { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+        .btn-reset {
+            margin-top: 20px;
+            width: 100%;
+            padding: 11px 24px;
+            background: transparent;
+            color: var(--muted);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.82rem;
+            letter-spacing: 0.06em;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-reset:hover { border-color: var(--muted); color: var(--text); }
+
+        @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeUp   { from { opacity:0; transform:translateY(16px);  } to { opacity:1; transform:translateY(0); } }
+        @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+        @keyframes spin     { to { transform: rotate(360deg); } }
+
+        @media (max-width: 560px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .derived-grid { grid-template-columns: 1fr 1fr; }
+            .card { padding: 20px; }
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+
+        <div class="header">
+            <div class="header-badge">Project KBS &middot; Forward Chaining</div>
+            <h1>Deteksi Risiko<br><em>Gagal Studi</em><br>Mahasiswa Informatika <em>UKDW</em></h1>
+            <p class="subtitle">Masukkan data akademik mahasiswa untuk menentukan tingkat risiko gagal studi menggunakan basis pengetahuan 51 rule IF-THEN.</p>
+        </div>
+
+        <!-- Loading state -->
+        <div id="loadingOverlay">
+            <div class="spinner"></div>
+            <span>Memuat rule_base.json&hellip;</span>
+        </div>
+
+        <!-- Error state (jika fetch gagal) -->
+        <div id="errorOverlay">
+            <strong>Gagal memuat rule_base.json</strong>
+            Pastikan file <code>rule_base.json</code> berada di folder yang sama dengan file HTML ini,
+            lalu buka melalui web server (bukan langsung double-click file HTML).<br><br>
+            Cara mudah: jalankan <code>python -m http.server</code> di folder tersebut,
+            lalu buka <code>http://localhost:8000</code> di browser.
+        </div>
+
+        <!-- Main form (tersembunyi sampai rule base selesai dimuat) -->
+        <div id="mainForm" style="display:none">
+
+            <!-- Card 1: Kondisi Kualitatif -->
+            <div class="card" style="animation-delay:0.05s">
+            <div class="section-label">01 &middot; Kondisi Kualitatif</div>
+            <div class="form-grid">
+
+                <div class="form-group">
+                <label>Status Keuangan Bermasalah</label>
+                <div class="radio-group">
+                    <div class="radio-btn">
+                    <input type="radio" name="keuangan" id="keuangan_tidak" value="Tidak" checked>
+                    <label for="keuangan_tidak">Tidak</label>
+                    </div>
+                    <div class="radio-btn">
+                    <input type="radio" name="keuangan" id="keuangan_ya" value="Ya">
+                    <label for="keuangan_ya">Ya</label>
+                    </div>
+                </div>
+                </div>
+
+                <div class="form-group">
+                <label>Sanksi Akademik</label>
+                <select id="sanksi">
+                    <option value="Tidak Ada">Tidak Ada</option>
+                    <option value="Skors">Skors</option>
+                    <option value="Tindak Kriminal">Tindak Kriminal</option>
+                </select>
+                </div>
+
+            </div>
+            </div>
+
+            <!-- Card 2: Data Akademik -->
+            <div class="card" style="animation-delay:0.12s">
+            <div class="section-label">02 &middot; Data Akademik</div>
+            <div class="form-grid">
+
+                <div class="form-group">
+                <label>Jumlah Semester <span class="hint">Rentang: 1 &ndash; 14</span></label>
+                <input type="number" id="semester" min="1" max="14" placeholder="contoh: 8">
+                <span class="error-msg" id="err_semester">Masukkan nilai 1&ndash;14</span>
+                </div>
+
+                <div class="form-group">
+                <label>IPK <span class="hint">Skala 0.00 &ndash; 4.00</span></label>
+                <input type="number" id="ipk" min="0" max="4" step="0.01" placeholder="contoh: 3.25">
+                <span class="error-msg" id="err_ipk">Masukkan nilai 0.00&ndash;4.00</span>
+                </div>
+
+                <div class="form-group">
+                <label>Semester Tidak Aktif Berturut <span class="hint">Semester tidak aktif: &ge; 0</span></label>
+                <input type="number" id="tidak_aktif_berturut" min="0" max="14" placeholder="contoh: 0">
+                <span class="error-msg" id="err_tab">Masukkan nilai &ge; 0</span>
+                </div>
+
+                <div class="form-group">
+                <label>MK Wajib Lulus <span class="hint">Maks. MK Wajib: 36</span></label>
+                <input type="number" id="mk_wajib" min="0" max="36" placeholder="contoh: 32">
+                <span class="error-msg" id="err_mkw">Masukkan nilai 0&ndash;36</span>
+                </div>
+
+                <div class="form-group">
+                <label>MK Pilihan Wajib Profil <span class="hint">Jumlah MK</span></label>
+                <input type="number" id="mk_profil" min="0" placeholder="contoh: 5">
+                </div>
+
+                <div class="form-group">
+                <label>MK Pilihan Bebas Prodi <span class="hint">Jumlah MK</span></label>
+                <input type="number" id="mk_prodi" min="0" placeholder="contoh: 4">
+                </div>
+
+                <div class="form-group full">
+                <label>MK Pilihan Bebas Non-Bidang <span class="hint">Maks. 3 MK</span></label>
+                <input type="number" id="mk_nonbidang" min="0" max="3" placeholder="contoh: 2">
+                <span class="error-msg" id="err_mknb">Masukkan nilai 0&ndash;3</span>
+                </div>
+
+            </div>
+            </div>
+
+            <!-- Submit -->
+            <button class="btn-submit" onclick="diagnose()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Jalankan Inferensi
+            </button>
+
+            <!-- Result -->
+            <div class="result" id="result">
+            <div class="result-header">
+                <div class="result-icon" id="result-icon"></div>
+                <div>
+                <div class="result-label" id="result-label"></div>
+                <div class="result-title" id="result-title"></div>
+                </div>
+            </div>
+            <p class="result-desc" id="result-desc"></p>
+            <div class="rule-fired">
+                <span class="rule-id" id="result-rule"></span>
+                <span id="result-rule-desc"></span>
+            </div>
+            <div class="derived-grid">
+                <div class="derived-item">
+                <div class="derived-val" id="d_sp"></div>
+                <div class="derived-key">Jumlah SP</div>
+                </div>
+                <div class="derived-item">
+                <div class="derived-val" id="d_total_pilihan"></div>
+                <div class="derived-key">Total MK Pilihan</div>
+                </div>
+                <div class="derived-item">
+                <div class="derived-val" id="d_total_mk"></div>
+                <div class="derived-key">Total MK</div>
+                </div>
+            </div>
+            <button class="btn-reset" onclick="resetForm()">&#8635; Input Baru</button>
+            </div>
+
+        </div>
+
+        </div>
+
+        <script>
+        // Ambil rule base dari json
+        var RULES = [];
+
+        fetch('rule_base.json')
+        .then(function(res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        })
+        .then(function(data) {
+            RULES = data.map(function(r) {
+            return { id: r.id, risiko: r.risiko, cond: r.conditions };
+            });
+
+            // Sembunyikan loading, tampilkan form
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('mainForm').style.display = 'block';
+        })
+        .catch(function(err) {
+            // Tampilkan pesan error
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('errorOverlay').style.display = 'block';
+            console.error('Gagal memuat rule_base.json:', err);
+        });
+
+        // Helpers
+        function cekKondisi(nilai, kondisi) {
+        if (kondisi !== null && typeof kondisi === 'object' && ('min' in kondisi || 'max' in kondisi)) {
+            if (kondisi.min !== null && nilai < kondisi.min) return false;
+            if (kondisi.max !== null && nilai > kondisi.max) return false;
+            return true;
+        }
+        return nilai === kondisi;
+        }
+
+        function hitungSP(semester) {
+        if (semester <= 8)  return 0;
+        if (semester <= 10) return 1;
+        if (semester <= 12) return 2;
+        return 3;
+        }
+
+        // Forward Chaining - First-Hit Priority
+        function inferensi(wm) {
+        for (var i = 0; i < RULES.length; i++) {
+            var rule = RULES[i];
+            var match = true;
+            var keys = Object.keys(rule.cond);
+            for (var j = 0; j < keys.length; j++) {
+            var attr = keys[j];
+            if (!(attr in wm) || !cekKondisi(wm[attr], rule.cond[attr])) {
+                match = false;
+                break;
+            }
+            }
+            if (match) return { risiko: rule.risiko, ruleId: rule.id };
+        }
+        return { risiko: 'Tidak Terklasifikasi', ruleId: '-' };
+        }
+
+        // Main
+        function diagnose() {
+        document.querySelectorAll('.error-msg').forEach(function(e) { e.style.display = 'none'; });
+
+        var semester     = parseFloat(document.getElementById('semester').value);
+        var ipk          = parseFloat(document.getElementById('ipk').value);
+        var tab          = parseFloat(document.getElementById('tidak_aktif_berturut').value);
+        var mk_wajib     = parseFloat(document.getElementById('mk_wajib').value);
+        var mk_profil    = parseFloat(document.getElementById('mk_profil').value) || 0;
+        var mk_prodi     = parseFloat(document.getElementById('mk_prodi').value) || 0;
+        var mk_nonbidang = parseFloat(document.getElementById('mk_nonbidang').value) || 0;
+        var keuangan     = document.querySelector('input[name="keuangan"]:checked').value;
+        var sanksi       = document.getElementById('sanksi').value;
+
+        var valid = true;
+        if (isNaN(semester) || semester < 1  || semester > 14) { document.getElementById('err_semester').style.display='block'; valid=false; }
+        if (isNaN(ipk)      || ipk < 0       || ipk > 4)       { document.getElementById('err_ipk').style.display='block';      valid=false; }
+        if (isNaN(tab)      || tab < 0)                         { document.getElementById('err_tab').style.display='block';      valid=false; }
+        if (isNaN(mk_wajib) || mk_wajib < 0  || mk_wajib > 36) { document.getElementById('err_mkw').style.display='block';      valid=false; }
+        if (mk_nonbidang < 0 || mk_nonbidang > 3)               { document.getElementById('err_mknb').style.display='block';     valid=false; }
+        if (!valid) return;
+
+        var total_mk_pilihan = mk_profil + mk_prodi + mk_nonbidang;
+        var total_mk         = mk_wajib + total_mk_pilihan;
+        var jumlah_sp        = hitungSP(semester);
+
+        var wm = {
+            status_keuangan_bermasalah:    keuangan,
+            sanksi_akademik:               sanksi,
+            semester_tidak_aktif_berturut: tab,
+            jumlah_sp:                     jumlah_sp,
+            ipk:                           ipk,
+            jmlh_matkul_wajib:             mk_wajib,
+            total_matkul:                  total_mk,
+            semester:                      semester
+        };
+
+        var res    = inferensi(wm);
+        var risiko = res.risiko;
+        var ruleId = res.ruleId;
+
+        var cls = risiko === 'Tidak Terklasifikasi' ? 'tidak' : risiko.toLowerCase();
+        var el = document.getElementById('result');
+        el.className = 'result ' + cls;
+
+        var META = {
+            'Tinggi': {
+            icon: '\u26A0\uFE0F',
+            label: 'Risiko Gagal Studi',
+            title: 'Risiko Tinggi',
+            desc: 'Mahasiswa ini terindikasi berisiko tinggi untuk gagal studi. Diperlukan intervensi segera dari pihak akademik, bimbingan konseling, dan evaluasi menyeluruh terhadap kondisi akademik maupun non-akademik.'
+            },
+            'Sedang': {
+            icon: '\uD83D\uDD36',
+            label: 'Risiko Gagal Studi',
+            title: 'Risiko Sedang',
+            desc: 'Mahasiswa ini berada pada tingkat risiko sedang. Perlu perhatian dan pembinaan dari dosen pembimbing akademik untuk mencegah penurunan performa lebih lanjut.'
+            },
+            'Rendah': {
+            icon: '\u2705',
+            label: 'Risiko Gagal Studi',
+            title: 'Risiko Rendah',
+            desc: 'Mahasiswa ini berada pada tingkat risiko rendah. Kondisi akademik masih dalam batas yang baik. Tetap diperlukan pemantauan berkala untuk menjaga performa.'
+            },
+            'Tidak Terklasifikasi': {
+            icon: '\u2753',
+            label: 'Hasil Inferensi',
+            title: 'Tidak Terklasifikasi',
+            desc: 'Data tidak cocok dengan rule manapun dalam basis pengetahuan. Periksa kembali kelengkapan data atau konsultasikan dengan administrator sistem.'
+            }
+        };
+
+        var m = META[risiko] || META['Tidak Terklasifikasi'];
+        document.getElementById('result-icon').textContent      = m.icon;
+        document.getElementById('result-label').textContent     = m.label;
+        document.getElementById('result-title').textContent     = m.title;
+        document.getElementById('result-desc').textContent      = m.desc;
+        document.getElementById('result-rule').textContent      = ruleId;
+        document.getElementById('result-rule-desc').textContent = 'Rule ' + ruleId + ' terpenuhi \u2014 first-hit priority, forward chaining';
+        document.getElementById('d_sp').textContent             = jumlah_sp;
+        document.getElementById('d_total_pilihan').textContent  = total_mk_pilihan;
+        document.getElementById('d_total_mk').textContent       = total_mk;
+
+        el.style.display = 'block';
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function resetForm() {
+        document.getElementById('result').style.display = 'none';
+        ['semester','ipk','tidak_aktif_berturut','mk_wajib','mk_profil','mk_prodi','mk_nonbidang']
+            .forEach(function(id) { document.getElementById(id).value = ''; });
+        document.getElementById('keuangan_tidak').checked = true;
+        document.getElementById('sanksi').value = 'Tidak Ada';
+        document.querySelectorAll('.error-msg').forEach(function(e) { e.style.display = 'none'; });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        </script>
+    </body>
+</html>
