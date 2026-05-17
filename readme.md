@@ -36,6 +36,6 @@ Dataset berisi data mahasiswa Informatika UKDW angkatan 2020–2021 yang telah m
 KBS-Project/
 ├── preprocessing/
 └── app/
-    ├── KBS_v.1/
-    └── KBS_v.2/
+    ├── KBS_v.1/   <-- cukup run di terminal
+    └── KBS_v.2/   <-- dengan tambahan UI, run di browser
 ```
