@@ -72,10 +72,10 @@ def tanya(prompt, tipe=str, pilihan=None, min_val=None, max_val=None):
                 print(f"  Pilih salah satu: {', '.join(str(p) for p in pilihan)}")
                 continue
             if min_val is not None and nilai < min_val:
-                print(f"  Nilai minimal: {min_val}")
+                print(f"  Input tidak valid. Nilai minimal: {min_val}")
                 continue
             if max_val is not None and nilai > max_val:
-                print(f"  Nilai maksimal: {max_val}")
+                print(f"  Input tidak valid. Nilai maksimal: {max_val}")
                 continue
 
             return nilai
@@ -115,8 +115,8 @@ def kumpulkan_input():
     print("  --- Data Akademik ---")
 
     data["semester"] = tanya(
-        "  Jumlah semester yang telah ditempuh (1-14): ",
-        tipe=int, min_val=1, max_val=14
+        "  Jumlah semester yang telah ditempuh (4-14): ",
+        tipe=int, min_val=4, max_val=14
     )
 
     data["ipk"] = tanya(
