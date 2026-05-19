@@ -5,7 +5,6 @@
 - Paulus Ungirwalu - 71231017
 
 ## Cara Penggunaan
-- Pastikan `rule_base.json` dan `app.html` berada di 1 folder yang sama
 - Buka Terminal di folder itu dan jalankan `python -m http.server`
 - Buka `http://localhost:8000/app.html` di Browser
 
